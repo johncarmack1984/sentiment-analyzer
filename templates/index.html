@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sentiment Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;900&family=Poltawski+Nowy:wght@700&family=Source+Code+Pro&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Poltawski Nowy", "serif"],
+              display: ["Poltawski Nowy", "serif"],
+              mono: ["Source Code Pro", "monospace"],
+            },
+          },
+        },
+      };
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  </head>
+  <body
+    class="dark:bg-neutral-800 dark:text-neutral-100 h-screen justify-center max-w-[1024px] w-11/12 md:w-1/2 mx-auto flex flex-col"
+  >
+    <h1 class="font-display text-6xl mb-5">Sentiment Analyzer</h1>
+    <textarea
+      class="dark:text-neutral-900 font-mono p-2 my-2 rounded-lg border border-neutral-900 dark:border-transparent hover:ring-1 hover:ring-blue-200"
+      id="text"
+      rows="4"
+      cols="50"
+      placeholder="Enter text to analyze"
+    ></textarea>
+    <button
+      class="bg-green-700 text-neutral-100 font-light uppercase tracking-widest p-2 mb-2 rounded-lg hover:bg-green-600"
+      id="analyze-button"
+    >
+      Analyze
+    </button>
+    <button
+      class="bg-neutral-400 dark:text-neutral-900 font-light uppercase tracking-widest p-2 mb-2 rounded-lg hover:bg-neutral-200"
+      id="reset-button"
+    >
+      Reset
+    </button>
+    <p class="" id="result">&nbsp;</p>
+
+    <script>
+      $("#analyze-button").click(function () {
+        $.ajax({
+          contentType: "application/json",
+          dataType: "json",
+          url: "/analyze",
+          type: "POST",
+          data: JSON.stringify({
+            text: $("#text").val(),
+          }),
+          success: function (response) {
+            $("#result").text("Sentiment: " + response.sentiment);
+          },
+          error: function (error) {
+            console.log(error);
+          },
+        });
+      });
+      $("#reset-button").click(function () {
+        $("#text").val("");
+        $("#result").text("\xa0");
+      });
+    </script>
+  </body>
+</html>

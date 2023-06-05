@@ -1,0 +1,18 @@
+{
+  "dev": {
+    "api_key_required": true,
+    "app_function": "app.app",
+    "aws_region": "us-west-1",
+    "profile_name": "default",
+    "project_name": "sentiment-analysis",
+    "runtime": "python3.9",
+    "s3_bucket": "sentiment-analysis-zappa-dev"
+  },
+  "production": {
+    "app_function": "app.app",
+    "aws_region": "us-west-1",
+    "project_name": "sentiment-analysis",
+    "runtime": "python3.9",
+    "s3_bucket": "sentiment-analysis-zappa-prod"
+  }
+}
