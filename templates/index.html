@@ -1,6 +1,49 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- SEO meta tags -->
+    <meta
+      name="description"
+      content="Sentiment Analyzer - A quick and simple tool to analyze the sentiment of any text."
+    />
+    <meta
+      name="keywords"
+      content="Sentiment Analysis, Text Analysis, Natural Language Processing, AI, ML, Python, Flask"
+    />
+    <meta name="author" content="John Carmack" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sentiment.themiscpage.com/" />
+    <meta property="og:title" content="Sentiment Analyzer" />
+    <meta
+      property="og:description"
+      content="A quick and simple tool to analyze the sentiment of any text."
+    />
+    <meta
+      property="og:image"
+      content="{{ url_for('static', filename='signature.png' )}}"
+    />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://sentiment.themiscpage.com/" />
+    <meta property="twitter:title" content="Sentiment Analyzer" />
+    <meta
+      property="twitter:description"
+      content="A quick and simple tool to analyze the sentiment of any text."
+    />
+    <meta
+      property="twitter:image"
+      content="{{ url_for('static', filename='signature.png' )}}"
+    />
     <title>Sentiment Analyzer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -24,9 +67,10 @@
       };
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body
-    class="dark:bg-neutral-800 dark:text-neutral-100 h-screen justify-center max-w-[1024px] w-11/12 md:w-1/2 mx-auto flex flex-col"
+    class="dark:bg-neutral-800 dark:text-neutral-100 h-screen pt-8 md:pt-0 md:justify-center max-w-[1024px] w-11/12 md:w-1/2 mx-auto flex flex-col"
   >
     <h1 class="font-display text-6xl mb-5">Sentiment Analyzer</h1>
     <textarea
