@@ -1,8 +1,10 @@
 {
   "dev": {
-    "api_key_required": true,
     "app_function": "app.app",
     "aws_region": "us-west-1",
+    "certificate_arn": "arn:aws:acm:us-east-1:735853783919:certificate/76e3cfa6-afa2-4cee-91c1-7e57e66a4e43",
+    "cors": true,
+    "domain": "sentiment-dev.themiscpage.com",
     "profile_name": "default",
     "project_name": "sentiment-analysis",
     "runtime": "python3.9",
@@ -11,6 +13,9 @@
   "production": {
     "app_function": "app.app",
     "aws_region": "us-west-1",
+    "certificate_arn": "arn:aws:acm:us-east-1:735853783919:certificate/76e3cfa6-afa2-4cee-91c1-7e57e66a4e43",
+    "cors": true,
+    "domain": "sentiment.themiscpage.com",
     "project_name": "sentiment-analysis",
     "runtime": "python3.9",
     "s3_bucket": "sentiment-analysis-zappa-prod"
