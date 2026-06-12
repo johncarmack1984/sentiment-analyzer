@@ -104,3 +104,55 @@ resource "aws_iam_user_policy_attachment" "deploy" {
   user       = aws_iam_user.sentiment_analyzer_prod.name
   policy_arn = aws_iam_policy.deploy.arn
 }
+
+# --- OIDC deploy role (GitHub Actions assumes this; no long-lived keys) ---
+# The CI runs `zappa update production` on push to main; it federates into this
+# role via the account's shared GitHub OIDC provider (managed in
+# my-infra/github-oidc) and gets exactly the policy above. Trust is restricted to
+# the main branch since the deploy targets production. Supersedes the access-key
+# the workflow used to read from GitHub secrets; the sentiment-analyzer-prod user
+# is now redundant (deletion candidate).
+
+data "aws_iam_openid_connect_provider" "github" {
+  url = "https://token.actions.githubusercontent.com"
+}
+
+data "aws_iam_policy_document" "deploy_trust" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    principals {
+      type        = "Federated"
+      identifiers = [data.aws_iam_openid_connect_provider.github.arn]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:johncarmack1984/sentiment-analyzer:ref:refs/heads/main"]
+    }
+  }
+}
+
+resource "aws_iam_role" "deploy" {
+  name               = "github-actions-sentiment-analyzer-deploy"
+  description        = "OIDC role GitHub Actions assumes to run `zappa update production`."
+  assume_role_policy = data.aws_iam_policy_document.deploy_trust.json
+}
+
+resource "aws_iam_role_policy_attachment" "deploy" {
+  role       = aws_iam_role.deploy.name
+  policy_arn = aws_iam_policy.deploy.arn
+}
+
+output "deploy_role_arn" {
+  description = "Set as the AWS_ROLE_TO_ASSUME secret for the Zappa workflow."
+  value       = aws_iam_role.deploy.arn
+}
