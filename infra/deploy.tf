@@ -61,6 +61,9 @@ resource "aws_iam_policy" "deploy" {
         ]
       },
       {
+        # Zappa names the keep-warm rule with a deployment-hash prefix
+        # (<hash>-zappa-keep-warm-handler.keep_warm_callback), NOT after the
+        # project — so match the zappa-keep-warm pattern instead of the app name.
         Sid    = "KeepWarmRule"
         Effect = "Allow"
         Action = [
@@ -71,7 +74,7 @@ resource "aws_iam_policy" "deploy" {
           "events:RemoveTargets",
           "events:ListTargetsByRule",
         ]
-        Resource = "arn:aws:events:us-west-1:735853783919:rule/sentiment-analysis-production*"
+        Resource = "arn:aws:events:us-west-1:735853783919:rule/*zappa-keep-warm*"
       },
       {
         Sid      = "KeepWarmList"
