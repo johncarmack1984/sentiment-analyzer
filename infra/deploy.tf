@@ -25,24 +25,14 @@ resource "aws_iam_policy" "deploy" {
         Resource = "${aws_s3_bucket.zappa_prod.arn}/*"
       },
       {
-        Sid    = "UpdateFunction"
-        Effect = "Allow"
-        Action = [
-          "lambda:GetFunction",
-          "lambda:GetFunctionConfiguration",
-          "lambda:GetFunctionConcurrency",
-          "lambda:ListVersionsByFunction",
-          "lambda:UpdateFunctionCode",
-          "lambda:UpdateFunctionConfiguration",
-          "lambda:GetPolicy",
-          "lambda:AddPermission",
-          "lambda:RemovePermission",
-          "lambda:GetAlias",
-          "lambda:ListAliases",
-          "lambda:CreateAlias",
-          "lambda:UpdateAlias",
-          "lambda:PublishVersion",
-        ]
+        # `zappa update` touches a long, version-dependent list of function calls
+        # (code, config, concurrency, aliases, versions, tags, permissions).
+        # Rather than enumerate every action and chase each denial, scope by
+        # RESOURCE: full control of THIS one function (and its versions/aliases),
+        # nothing else in Lambda.
+        Sid      = "ManageFunction"
+        Effect   = "Allow"
+        Action   = ["lambda:*"]
         Resource = [
           "arn:aws:lambda:us-west-1:735853783919:function:sentiment-analysis-production",
           "arn:aws:lambda:us-west-1:735853783919:function:sentiment-analysis-production:*",
