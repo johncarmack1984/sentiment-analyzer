@@ -37,8 +37,16 @@ resource "aws_iam_policy" "deploy" {
           "lambda:GetPolicy",
           "lambda:AddPermission",
           "lambda:RemovePermission",
+          "lambda:GetAlias",
+          "lambda:ListAliases",
+          "lambda:CreateAlias",
+          "lambda:UpdateAlias",
+          "lambda:PublishVersion",
         ]
-        Resource = "arn:aws:lambda:us-west-1:735853783919:function:sentiment-analysis-production"
+        Resource = [
+          "arn:aws:lambda:us-west-1:735853783919:function:sentiment-analysis-production",
+          "arn:aws:lambda:us-west-1:735853783919:function:sentiment-analysis-production:*",
+        ]
       },
       {
         Sid    = "ZappaStack"
