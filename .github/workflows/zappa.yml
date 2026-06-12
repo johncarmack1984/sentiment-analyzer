@@ -37,6 +37,10 @@ jobs:
           source venv/bin/activate
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          # zappa 0.57's create_lambda_zip uses distutils.dir_util.copy_tree, which
+          # breaks on setuptools' newer _distutils (ModuleNotFoundError:
+          # distutils._modified, introduced in setuptools 69.5). Pin below it.
+          pip install 'setuptools<69'
 
       - name: Deploy
         run: |
