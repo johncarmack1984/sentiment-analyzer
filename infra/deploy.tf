@@ -89,12 +89,21 @@ resource "aws_iam_policy" "deploy" {
         Resource = aws_iam_role.zappa_production.arn
       },
       {
+        # The execution role is passed not only to Lambda but also to EventBridge
+        # (keep-warm rule) and API Gateway — its trust policy lists all three — so
+        # the PassedToService condition must allow each, not just lambda.
         Sid      = "PassExecutionRole"
         Effect   = "Allow"
         Action   = ["iam:PassRole"]
         Resource = aws_iam_role.zappa_production.arn
         Condition = {
-          StringEquals = { "iam:PassedToService" = "lambda.amazonaws.com" }
+          StringEquals = {
+            "iam:PassedToService" = [
+              "lambda.amazonaws.com",
+              "events.amazonaws.com",
+              "apigateway.amazonaws.com",
+            ]
+          }
         }
       },
     ]
